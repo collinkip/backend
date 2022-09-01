@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose')
 const workouts=require('../models/workoutmodels')
 
 
@@ -12,7 +13,13 @@ const getAllworkouts=async(req,res)=>{
 
 const getWorkouts=async(req,res)=>{
     const { id }=req.params
+    
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({error:'the id is invalid'})
+    }
     const Workout=await workouts.findById(id)
+
     if (!Workout) {
         return res.status(404).json({error:'No such workouts'})
     }
